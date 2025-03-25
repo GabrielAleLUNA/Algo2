@@ -59,25 +59,88 @@ class Lista(Generic[T]):
                 _eliminar_interna(self._head.sig, self, valor)
 
     def ultimo(self) -> T:
-        pass
+        if self.es_vacia():
+            raise IndexError('lista vacia')
+        if self._head.sig.es_vacia():
+            return self._head.dato
+        else:
+            return self._head.sig.ultimo()
 
     def concat(self, ys: ListaGenerica) -> ListaGenerica:
-        pass
-        
+        if self.es_vacia():
+            return ys.copy()
+        else:
+            nueva_lista = self.copy()
+            if nueva_lista._head.sig.es_vacia():
+                nueva_lista._head.sig = ys.copy()
+            else:
+                nueva_lista._head.sig = nueva_lista._head.sig.concat(ys)
+            return nueva_lista
+       
     def join(self, separador: str = '') -> str:
-        pass
-        
-    def index(self, valor: T) -> int:
-        pass
-        
+        if self.es_vacia():
+            return ''
+        else:
+            if self._head.sig.es_vacia():
+                return str(self.head())
+            else:
+                return str(self.head()) + separador + self._head.sig.join(separador)
+       
+    def index(self, valor: T, indice_actual: int = 0) -> int:
+        if self.es_vacia():
+            raise ValueError(f'{valor} no encontrado en la lista')
+        else:
+            if self.head() == valor:
+                return indice_actual
+            else:
+                return self._head.sig.index(valor, indice_actual + 1)
+       
     def existe(self, valor: T) -> bool:
-        pass
+        if self.es_vacia():
+            return False
+        else:
+            if self.head() == valor:
+                return True
+            else:
+                return self._head.sig.existe(valor)
 
     def __repr__(self):
-        pass
+        if self.es_vacia():
+            return '[]'
+        else:
+            if self._head.sig.es_vacia():
+                return '[' + str(self.head()) + ']'
+            else:
+                return '[' + str(self.head()) + ', ' + self._head.sig.__repr__()[1:-1] + ']'
         
     def __eq__(self, otra: ListaGenerica) -> bool:
-        pass
+        if self.es_vacia() and otra.es_vacia():
+            return True
+        elif self.es_vacia() or otra.es_vacia():
+            return False
+        else:
+            if self.head() != otra.head():
+                return False
+            else:
+                return self._head.sig == otra._head.sig
+
+    def __len__(self) -> int:
+        if self.es_vacia():
+            return 0
+        else:
+            return 1 + len(self._head.sig)
+    def __getitem__(self, index: int) -> T:
+        if index < 0:
+            raise IndexError("Index out of range")
+        if index == 0:
+            return self.head()
+        else:
+            return self._head.sig[index-1]
+
+    def __iter__(self):
+        if not self.es_vacia():
+            yield self.head()
+            yield from self._head.sig    
 
 if __name__ == '__main__':
     xs: Lista[int] = Lista()
@@ -116,4 +179,6 @@ if __name__ == '__main__':
     zs.insertar(10)
     zs.insertar(20)
     print(f'xs == zs? {xs == zs}')                  # True
+    
+
     
