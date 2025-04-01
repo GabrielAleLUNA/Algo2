@@ -227,4 +227,48 @@ def max_elemento(lista: list[int]) -> int:
     return max_elemento_interno(lista,0) 
 print(max_elemento([441, 2, 33, 44, 5]))  
 
+# Escribir una función recursiva de cola para calcular la
+# suma de los elementos de una lista de enteros.
+
+def suma_lista(lista: list[int]) -> int:
+    def suma_lista_interna(lista: list[int], acumulador: int) -> int:
+        if not lista:
+            return acumulador
+        else:
+            return suma_lista_interna(lista[1:], acumulador + lista[0])
+    return suma_lista_interna(lista, 0) 
+
+print(suma_lista([1, 2, 3, 4, 5]))  # 15
+
+# Definir la función esPalindromo, que dada una lista de
+# enteros, retorne si es o no es palíndromo, utilizando
+# recursividad explícita
+
+def es_palindromo(lista: list[int]) -> bool:
+    def es_palindromo_interno(lista: list[int], inicio: int, fin: int) -> bool:
+        if inicio >= fin:
+            return True
+        elif lista[inicio] != lista[fin]:
+            return False
+        else:
+            return es_palindromo_interno(lista, inicio + 1, fin - 1)
+    return es_palindromo_interno(lista, 0, len(lista) - 1)
+
+print(es_palindromo([1, 2, 3, 2, 1]))  # True
+
+# Definir la función recursiva cantidad, que dada
+# una lista de enteros y un número n, retorne la
+# cantidad de apariciones del número n en la lista dada.
+
+def cantidad(lista: list[int], n: int) -> int:
+    if not lista:
+        return 0
+    elif lista[0] == n:
+        return 1 + cantidad(lista[1:], n)   
+    else:
+        return cantidad(lista[1:], n)   
+    
+print(cantidad([1, 2, 3, 2, 1], 2))  # 2
+print(cantidad([1, 2, 3, 4, 5], 6))  # 0
+
 
